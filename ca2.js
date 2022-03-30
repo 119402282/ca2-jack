@@ -87,9 +87,12 @@ function draw() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#070d30"; // light sky blue
     context.fillRect(0,0,canvas.width,canvas.height)
-    for (let r = 0; r < 25; r += 1) {
-        for (let c = 0; c < 32; c += 1) {
-            let tile = background[r][c]; 
+    for (let r = 0; r < background.length; r++) { //this should be 32 or maybe 15
+        for (let c = 0; c < background[r]; c++) { //this should be 25
+            if(!(r in background) || !(c in background[r])){
+                console.log('r('+r+'):'+ (r in background) +', c('+c+'):'+ (c in background[r]))
+            }
+            let tile = background?.[r]?.[c]; 
             if (tile >= 0) {
                 let tileRow = Math.floor(tile / tilesPerRow); 
                 let tileCol = Math.floor(tile % tilesPerRow);
@@ -159,69 +162,69 @@ function deactivate(event) {
     }
 }
 
-// function player_collides(a) {
-//     if (player.x + player.size < a.x ||
-//         a.x + a.size < player.x ||
-//         player.y > a.y + a.size ||
-//         a.y > player.y + player.size) {
-//             return false;
-//         } else {
-//             return true;
-//         }
-// }
+function player_collides(a) {
+    if (player.x + player.size < a.x ||
+        a.x + a.size < player.x ||
+        player.y > a.y + a.size ||
+        a.y > player.y + player.size) {
+            return false;
+        } else {
+            return true;
+        }
+}
 
-// function stop(message) { 
-//     window.removeEventListener("keydown", activate, false);
-//     window.removeEventListener("keyup", deactivate, false);
-//     window.cancelAnimationFrame(request_id);
-//     let outcome_element = document.querySelector("#outcome");
-//     outcome_element.innerHTML = message ;
+function stop(message) { 
+    window.removeEventListener("keydown", activate, false);
+    window.removeEventListener("keyup", deactivate, false);
+    window.cancelAnimationFrame(request_id);
+    let outcome_element = document.querySelector("#outcome");
+    outcome_element.innerHTML = message ;
 
-//     let data = new FormData();
-//     data.append("score", score);
+    let data = new FormData();
+    data.append("score", score);
 
-//     xhttp = new XMLHttpRequest();
-//     xhttp.addEventListener("readystatechange", handle_response, false);
-//     xhttp.open("POST", "/store_score", true)
-//     xhttp.send(data);
-// }
+    xhttp = new XMLHttpRequest();
+    xhttp.addEventListener("readystatechange", handle_response, false);
+    xhttp.open("POST", "/store_score", true)
+    xhttp.send(data);
+}
 
 
-// function handle_response() {
-//     // Check that the response has fully arrived
-//     if ( xhttp.readyState === 4 ) {
-//         // Check the request was successful
-//         if ( xhttp.status === 200 ) {
-//             if ( xhttp.responseText === "success") {
-//                 // score was successfully stores in database 
-//             } else {
-//                 // score was not successfully stores in database 
-//             }
-//         }
-//     }
-// }
+function handle_response() {
+    // Check that the response has fully arrived
+    if ( xhttp.readyState === 4 ) {
+        // Check the request was successful
+        if ( xhttp.status === 200 ) {
+            if ( xhttp.responseText === "success") {
+                // score was successfully stores in database 
+            } else {
+                // score was not successfully stores in database 
+            }
+        }
+    }
+}
 
-// function update_liked_count() {
-//     xhttp = new XMLHttpRequest();
-//     xhttp.addEventListener("readystatechange", handle_response2, false);
-//     xhttp.open("GET", "/get_num_likes", true);
-//     xhttp.send(null);
-// }
+function update_liked_count() {
+    xhttp = new XMLHttpRequest();
+    xhttp.addEventListener("readystatechange", handle_response2, false);
+    xhttp.open("GET", "/get_num_likes", true);
+    xhttp.send(null);
+}
 
-// function handle_response2() {
-//     // Check that the response has fully arrived
-//     if ( xhttp.readyState === 4 ) {
-//         // Check the request was successful
-//         if ( xhttp.status === 200 ) {
-//             let response = JSON.parse(xhttp.responseText);
-//             liked_count_element.innerHTML = response.count
-//         }
-//     }
-// }
+function handle_response2() {
+    // Check that the response has fully arrived
+    if ( xhttp.readyState === 4 ) {
+        // Check the request was successful
+        if ( xhttp.status === 200 ) {
+            let response = JSON.parse(xhttp.responseText);
+            liked_count_element.innerHTML = response.count
+        }
+    }
+}
 
-// function resizeCanvas() {
-//     canvas.style.width = window.innerWidth + "px";
-//     setTimeout(function() {
-//       canvas.style.height = window.innerHeight + "px";
-//     }, 0);
-//   };
+function resizeCanvas() {
+    canvas.style.width = window.innerWidth + "px";
+    setTimeout(function() {
+      canvas.style.height = window.innerHeight + "px";
+    }, 0);
+  };
